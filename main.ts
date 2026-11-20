@@ -20,6 +20,12 @@ mkdirSync(outDir, { recursive: true }); // /output exists in the grader
 
 const here = dirname(fileURLToPath(import.meta.url));
 const image = readFileSync(join(here, 'entry.png'));
+// The bundled file must be the PNG this entry drew: check its signature
+// before copying it, so a bad build artifact fails here, not in grading.
+const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+if (!image.subarray(0, 8).equals(PNG_SIGNATURE)) {
+  throw new Error('entry.png is not a PNG file: refusing to write a bad image');
+}
 const outPath = join(outDir, 'entry.png');
 writeFileSync(outPath, image);
 // Verify the write: the output must be byte-identical to the source,

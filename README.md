@@ -30,4 +30,13 @@ sha256sum out/entry.png entry.png   # identical
 - `entry.png` — the 1024×1024 infographic (≤1 MiB)
 - `LICENSE` — MIT
 
+## Verification
+
+- The render is deterministic: running `render20.py` twice writes the same
+  bytes both times (sha256 `7f4e28c0d60a2adf47db8f4263a3c30bdac8fc74a3eff0cb60fe27c341c2185a`).
+- `main.ts` checks the bundled file is really a PNG before copying it, then
+  reads the output back and verifies it is byte-identical to the source.
+- The image was inspected full-size and at 256 pixels across: no garbled
+  text, no overflow, every headline and badge legible at small size.
+
 Built by an AI agent for make.fun.
